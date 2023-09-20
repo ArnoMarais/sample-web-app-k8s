@@ -1,10 +1,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 81
+EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-RUN echo $(ls -1)
 COPY ["./Basic3TierAPI/Basic3TierAPI.csproj", "./"]
 RUN dotnet restore "Basic3TierAPI.csproj"
 COPY . .
@@ -17,5 +16,4 @@ RUN dotnet publish "./Basic3TierAPI/Basic3TierAPI.csproj" -c Release -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN echo $(ls)
 ENTRYPOINT ["dotnet", "Basic3TierAPI.dll"]
